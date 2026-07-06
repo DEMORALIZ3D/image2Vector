@@ -44,6 +44,65 @@ export default function App() {
   const [separationMode, setSeparationMode] = useState<boolean>(true);
   const [colorMergeTolerance, setColorMergeTolerance] = useState<number>(35); // 0-100
 
+  // Gradient creator states
+  const [gradStart, setGradStart] = useState<string>('');
+  const [gradEnd, setGradEnd] = useState<string>('');
+  const [gradAngle, setGradAngle] = useState<number>(45);
+
+  const applyGradient = (startHex: string, endHex: string, angle: number) => {
+    if (!svgDocRef.current) return;
+
+    // Convert angle to SVG linear gradient coordinates (x1, y1, x2, y2)
+    const angleRad = (angle * Math.PI) / 180;
+    const x1 = Math.round(50 - Math.cos(angleRad) * 50);
+    const y1 = Math.round(50 - Math.sin(angleRad) * 50);
+    const x2 = Math.round(50 + Math.cos(angleRad) * 50);
+    const y2 = Math.round(50 + Math.sin(angleRad) * 50);
+
+    const gradId = `grad-${Date.now()}`;
+    const doc = svgDocRef.current;
+    const svgEl = doc.querySelector('svg');
+    if (!svgEl) return;
+
+    // Find or create <defs>
+    let defs = svgEl.querySelector('defs');
+    if (!defs) {
+      defs = doc.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      svgEl.insertBefore(defs, svgEl.firstChild);
+    }
+
+    // Create linearGradient
+    const gradEl = doc.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradEl.setAttribute('id', gradId);
+    gradEl.setAttribute('x1', `${x1}%`);
+    gradEl.setAttribute('y1', `${y1}%`);
+    gradEl.setAttribute('x2', `${x2}%`);
+    gradEl.setAttribute('y2', `${y2}%`);
+
+    const stop1 = doc.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', startHex);
+    gradEl.appendChild(stop1);
+
+    const stop2 = doc.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', endHex);
+    gradEl.appendChild(stop2);
+
+    defs.appendChild(gradEl);
+
+    // Swap fills for all matching color paths
+    const elements = doc.querySelectorAll('path, circle, ellipse, rect');
+    elements.forEach(el => {
+      const fill = el.getAttribute('fill');
+      if (fill && (fill.toUpperCase() === startHex.toUpperCase() || fill.toUpperCase() === endHex.toUpperCase())) {
+        el.setAttribute('fill', `url(#${gradId})`);
+      }
+    });
+
+    updateActiveSvg();
+  };
+
   // Post-processing parameters
   const [simplifyEpsilon, setSimplifyEpsilon] = useState<number>(0.2); // 0-5
   const [curveSmoothing, setCurveSmoothing] = useState<number>(0.8); // 0-1
@@ -184,6 +243,13 @@ export default function App() {
     })).sort((a, b) => b.count - a.count);
 
     setColors(colorList);
+    if (colorList.length >= 2) {
+      setGradStart(colorList[0].hex);
+      setGradEnd(colorList[1].hex);
+    } else if (colorList.length === 1) {
+      setGradStart(colorList[0].hex);
+      setGradEnd(colorList[0].hex);
+    }
     svgDocRef.current = doc;
     updateActiveSvg();
   };
@@ -742,6 +808,55 @@ export default function App() {
                   </div>
                 ))}
               </div>
+
+              {colors.length >= 2 && (
+                <div style={{ marginTop: '1.2rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <h4 style={{ fontSize: '0.8rem', marginBottom: '0.6rem', color: 'var(--text)' }}>
+                    Convert Colors to Gradient
+                  </h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: '1 1 120px' }}>
+                      <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Start Color</label>
+                      <select 
+                        value={gradStart} 
+                        onChange={(e) => setGradStart(e.target.value)}
+                        style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#fff', fontSize: '0.75rem', padding: '4px' }}
+                      >
+                        {colors.map(c => <option key={c.hex} value={c.hex}>{c.hex}</option>)}
+                      </select>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: '1 1 120px' }}>
+                      <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>End Color</label>
+                      <select 
+                        value={gradEnd} 
+                        onChange={(e) => setGradEnd(e.target.value)}
+                        style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#fff', fontSize: '0.75rem', padding: '4px' }}
+                      >
+                        {colors.map(c => <option key={c.hex} value={c.hex}>{c.hex}</option>)}
+                      </select>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: '1 1 150px' }}>
+                      <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Angle</span>
+                        <span>{gradAngle}°</span>
+                      </label>
+                      <input 
+                        type="range" min="0" max="360" step="15"
+                        value={gradAngle}
+                        onChange={(e) => setGradAngle(parseInt(e.target.value))}
+                        style={{ height: '4px' }}
+                      />
+                    </div>
+                    <button 
+                      className="toggle-btn active"
+                      onClick={() => applyGradient(gradStart, gradEnd, gradAngle)}
+                      style={{ height: 'fit-content', padding: '6px 12px', fontSize: '0.75rem', marginTop: 'auto' }}
+                    >
+                      Apply Gradient
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
