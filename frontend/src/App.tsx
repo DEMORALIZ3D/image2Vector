@@ -506,7 +506,13 @@ export default function App() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
+      {/* FLOATING GLOW ANIMATIONS BACKDROP */}
+      <div className="bg-glow-container">
+        <div className="bg-glow-orb bg-glow-1"></div>
+        <div className="bg-glow-orb bg-glow-2"></div>
+        <div className="bg-glow-orb bg-glow-3"></div>
+      </div>
       
       {/* HEADER BAR */}
       <header className="app-header">
@@ -992,7 +998,19 @@ export default function App() {
         <h3 className="showcase-title">More Products from AHM Labs</h3>
         <div className="showcase-grid">
           
-          <a href="https://ahm-labs.com" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
+          <a 
+            href="https://ahm-labs.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="glass-panel showcase-card"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+              e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+            }}
+          >
             <div className="showcase-logo-icon">
               <img src="/ahm_logo.svg" alt="AHM Labs Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
@@ -1000,7 +1018,19 @@ export default function App() {
             <span className="showcase-desc">AHM Labs is the studio by Aaron Mayo (aaron-js.dev) creating B2C/B2B sites and Enterprise Software.</span>
           </a>
 
-          <a href="https://nanolog.dev" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
+          <a 
+            href="https://nanolog.dev" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="glass-panel showcase-card"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+              e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+            }}
+          >
             <div className="showcase-logo-icon">
               <svg viewBox="0 0 1360 1123" fill="none">
                 <g transform="matrix(1,0,0,1,-366.39735,-407.766318)">
@@ -1014,7 +1044,19 @@ export default function App() {
             <span className="showcase-desc">NanoLog is a 3 in 1 communication tool for SaaS and is built under AHM Labs.</span>
           </a>
 
-          <a href="https://redact.nanolog.dev" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
+          <a 
+            href="https://redact.nanolog.dev" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="glass-panel showcase-card"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+              e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+            }}
+          >
             <div className="showcase-logo-icon">
               <svg viewBox="0 0 1360 1123" fill="none">
                 <g transform="matrix(1,0,0,1,-366.39735,-407.766318)">
@@ -1028,8 +1070,20 @@ export default function App() {
             <span className="showcase-desc">Redact is a free tool based on the same PII privacy NanoLog.dev is founded upon, built in-house.</span>
           </a>
 
-          <a href="https://fastaddress.ahm-labs.com" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
-            <div className="showcase-logo-icon">
+          <a 
+            href="https://fastaddress.ahm-labs.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="glass-panel showcase-card"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+              e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+            }}
+          >
+            <div className="showcase-logo-icon" style={{ width: '8.5rem', height: '4rem' }}>
               <img src="/fastaddress_logo.svg" alt="Fast Address UK Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </div>
             <span className="showcase-name">Fast Address UK</span>
