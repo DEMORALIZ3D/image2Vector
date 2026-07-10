@@ -62,6 +62,14 @@ body.dark-theme {
   filter: var(--fastaddress-filter) !important;
 }
 
+body.dark-theme .ahm-logo-svg path {
+  fill: #ffffff !important;
+}
+body.dark-theme .ahm-logo-svg .ahm-logo-stroke {
+  fill: none !important;
+  stroke: #ffffff !important;
+}
+
 body:not(.dark-theme) .app-title img {
   filter: brightness(0);
 }
