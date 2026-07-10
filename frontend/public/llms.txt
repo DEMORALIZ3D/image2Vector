@@ -1,0 +1,22 @@
+# VectoPrime
+
+VectoPrime is a high-fidelity image-to-vector (SVG) conversion web application built by AHM Labs. It runs entirely client-side in the browser using a Rust-compiled WebAssembly port of the VTracer engine.
+
+## Core Capabilities
+
+- **Color Separation Masking**: Segments colored images into individual binary layers using a nearest-neighbor classification approach. This yields sharp edges and resolves wobbly lines/blurry borders.
+- **Ramer-Douglas-Peucker (RDP) Simplification**: Reduces coordinate bloat by decimation of collinear vertices.
+- **Tangent Bézier Curve Fitting**: Detects sharp corners based on turn-angle thresholds, fitting smooth cubic Bézier segments to curves while maintaining rigid points.
+- **Geometric Primitive Detection**: Searches path coordinates for circular, elliptical, or rectangular geometry, replacing jagged path outlines with native `<circle>`, `<ellipse>`, and `<rect>` elements.
+- **Gradient Creation**: Allows users to merge multiple traced flat colors into smooth SVG `<linearGradient>` structures directly in the browser.
+
+## Built-In Features
+- In-browser computation (completely serverless, zero data sent to external servers).
+- Real-time settings sliders (precision, speckle filtering, corner thresholds, RDP epsilon, Bézier smoothing).
+- Interactive SVG Editor (point tooltip details, click-to-delete paths/shapes, color palette isolation).
+
+## Project Ecosystem (AHM Labs)
+- [ahm-labs.com](https://ahm-labs.com) - Main Astro site & lab dashboard.
+- [NanoLog](https://nanolog.dev) - Lightweight zero-dependency logger.
+- [Nanolog Redact](https://redact.nanolog.dev) - Direct PII redaction scanner for text/media logs.
+- [fastAddressUK](https://fastaddress.ahm-labs.com) - High-throughput British address parsing service.
