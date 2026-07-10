@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Upload, Download, Copy, Trash2, Settings, Activity, 
-  Eye, EyeOff, RefreshCw, FileCode, Check, ZoomIn, Info, Zap
+  RefreshCw, FileCode, Check, Info, Zap
 } from 'lucide-react';
+import { vectorizeInBrowser } from './services/wasmTracer.js';
 
 interface VectorStats {
   originalPaths: number;
@@ -43,6 +44,9 @@ export default function App() {
   
   const [separationMode, setSeparationMode] = useState<boolean>(true);
   const [colorMergeTolerance, setColorMergeTolerance] = useState<number>(35); // 0-100
+  const [engineMode, setEngineMode] = useState<'local' | 'wasm'>(
+    typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'local' : 'wasm'
+  );
 
   // Gradient creator states
   const [gradStart, setGradStart] = useState<string>('');
@@ -179,6 +183,35 @@ export default function App() {
     formData.append('separationMode', separationMode ? 'true' : 'false');
     formData.append('colorMergeTolerance', colorMergeTolerance.toString());
 
+    const postOptions = {
+      simplifyEpsilon,
+      curveSmoothing,
+      primitiveTolerance,
+      enablePrimitives,
+      colorMergeTolerance
+    };
+
+    if (engineMode === 'wasm') {
+      try {
+        if (!imagePreview) return;
+        const data = await vectorizeInBrowser(
+          imagePreview,
+          colorPrecision,
+          { filterSpeckle, cornerThreshold },
+          postOptions
+        );
+        setRawSvg(data.svg);
+        setStats(data.stats);
+        initializeSvgDocument(data.svg);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Wasm vectorization failed.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:3001/api/vectorize', {
         method: 'POST',
@@ -196,8 +229,22 @@ export default function App() {
       initializeSvgDocument(data.svg);
 
     } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Failed to connect to the backend server. Make sure it is running on port 3001.');
+      console.warn('Local Express server unavailable, trying in-browser Wasm fallback...', err);
+      try {
+        if (!imagePreview) return;
+        const data = await vectorizeInBrowser(
+          imagePreview,
+          colorPrecision,
+          { filterSpeckle, cornerThreshold },
+          postOptions
+        );
+        setRawSvg(data.svg);
+        setStats(data.stats);
+        initializeSvgDocument(data.svg);
+      } catch (wasmErr: any) {
+        console.error(wasmErr);
+        setError('Vectorization failed: Local Express server is offline, and browser Wasm fallback failed.');
+      }
     } finally {
       setLoading(false);
     }
@@ -263,7 +310,7 @@ export default function App() {
     
     // Update vector file size stat dynamically
     if (stats) {
-      const sizeKb = parseFloat((Buffer.byteLength(svgStr) / 1024).toFixed(2));
+      const sizeKb = parseFloat((new Blob([svgStr]).size / 1024).toFixed(2));
       setStats(prev => prev ? { ...prev, svgSizeKb: sizeKb } : null);
     }
   };
@@ -529,6 +576,24 @@ export default function App() {
                 <Settings size={16} /> Vectorizer Settings
               </h2>
               
+              <div className="form-group">
+                <label className="form-label">Processing Engine</label>
+                <div className="toggle-group">
+                  <button 
+                    className={`toggle-btn ${engineMode === 'local' ? 'active' : ''}`}
+                    onClick={() => setEngineMode('local')}
+                  >
+                    Local Backend
+                  </button>
+                  <button 
+                    className={`toggle-btn ${engineMode === 'wasm' ? 'active' : ''}`}
+                    onClick={() => setEngineMode('wasm')}
+                  >
+                    In-Browser (Wasm)
+                  </button>
+                </div>
+              </div>
+
               <div className="form-group">
                 <label className="form-label">Trace Mode</label>
                 <div className="toggle-group">
