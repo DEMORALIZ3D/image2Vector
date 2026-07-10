@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Upload, Download, Copy, Trash2, Settings, Activity, 
-  RefreshCw, FileCode, Check, Info, Zap
+  RefreshCw, FileCode, Check, Info, Zap, Sun, Moon
 } from 'lucide-react';
 import { vectorizeInBrowser } from './services/wasmTracer.js';
 
@@ -47,6 +47,17 @@ export default function App() {
   const [separationMode, setSeparationMode] = useState<boolean>(true);
   const [colorMergeTolerance, setColorMergeTolerance] = useState<number>(35); // 0-100
   const [engineMode, setEngineMode] = useState<'local' | 'wasm'>(isLocalhost ? 'local' : 'wasm');
+
+  // Theme states (Light by default)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }, [theme]);
 
   // Gradient creator states
   const [gradStart, setGradStart] = useState<string>('');
@@ -520,13 +531,32 @@ export default function App() {
           <img src="/logo.svg" alt="VectoPrime Logo" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '8px', objectFit: 'contain' }} />
           <span>VectoPrime</span>
         </div>
-        {isLocalhost && (
-          <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'center' }}>
+          {isLocalhost && (
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Status: <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>Active Local Node Engine</span>
             </span>
-          </div>
-        )}
+          )}
+          <button 
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: '50%',
+              width: '2.5rem',
+              height: '2.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: 'var(--text-primary)',
+              transition: 'all 0.3s'
+            }}
+            title="Toggle Light/Dark Theme"
+          >
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+        </div>
       </header>
 
       {/* DASHBOARD CONTAINER */}
@@ -1084,7 +1114,7 @@ export default function App() {
             }}
           >
             <div className="showcase-logo-icon" style={{ width: '8.5rem', height: '4rem' }}>
-              <img src="/fastaddress_logo.svg" alt="Fast Address UK Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <img src="/fastaddress_logo.svg" alt="Fast Address UK Logo" className="fastaddress-showcase-logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <span className="showcase-name">Fast Address UK</span>
             <span className="showcase-desc">A blazing fast UK Address API for other developers and vibe coders, with over 24 million UK addresses.</span>
@@ -1123,7 +1153,8 @@ export default function App() {
                 <img 
                   src="/fastaddress_logo.svg" 
                   alt="Fast Address UK Logo" 
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} 
+                  className="fastaddress-showcase-logo"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                 />
               </div>
             </div>
