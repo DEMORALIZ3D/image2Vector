@@ -510,9 +510,9 @@ export default function App() {
       
       {/* HEADER BAR */}
       <header className="app-header">
-        <div className="app-title">
-          <div className="app-logo-icon">V</div>
-          VectoPrime
+        <div className="app-title" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <img src="/logo.svg" alt="VectoPrime Logo" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '8px', objectFit: 'contain' }} />
+          <span>VectoPrime</span>
         </div>
         {isLocalhost && (
           <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
@@ -994,14 +994,10 @@ export default function App() {
           
           <a href="https://ahm-labs.com" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
             <div className="showcase-logo-icon">
-              <svg viewBox="0 0 773 154" fill="none">
-                <g transform="matrix(0.840407,0,0,0.840406,-170,18)">
-                  <path d="M702.037,364.625C703.503,364.872 705.009,365 706.545,365C708.736,365 710.865,364.739 712.904,364.246C719.879,363.034 726.119,358.972 730.04,352.921C734.769,345.623 735.48,336.426 731.927,328.488C715.331,291.406 688.245,230.883 675.659,202.76C670.925,192.183 660.418,185.375 648.83,185.375L630.545,185.375C629.014,185.375 627.65,186.344 627.146,187.789L604.721,252.092L576.85,187.548C576.28,186.229 574.981,185.375 573.545,185.375L544.243,185.375C542.73,185.375 541.378,186.322 540.86,187.744L522.865,237.216L523.145,188.996C523.15,188.037 522.773,187.116 522.098,186.437C521.422,185.757 520.503,185.375 519.545,185.375L480.545,185.375C478.557,185.375 476.945,186.987 476.945,188.975L476.945,251.4L435.145,251.4L435.145,188.975C435.145,186.987 433.533,185.375 431.545,185.375L389.545,185.375C387.557,185.375 385.945,186.987 385.945,188.975L385.945,235.289L362.786,187.407C362.184,186.165 360.925,185.375 359.545,185.375L342.236,185.375C328.888,185.375 316.933,193.634 312.21,206.119C295.417,250.506 254.088,359.751 254.088,359.751C253.67,360.857 253.821,362.098 254.493,363.071C255.165,364.044 256.273,364.625 257.455,364.625L702.037,364.625ZM717.188,313.181L669.087,205.702C665.513,197.716 657.58,192.575 648.83,192.575L633.102,192.575L608.478,263.185C607.989,264.586 606.691,265.544 605.208,265.598C603.725,265.651 602.362,264.789 601.773,263.427L571.178,192.575L546.765,192.575L522.528,259.206C521.929,260.851 520.233,261.827 518.51,261.518C516.786,261.21 515.535,259.705 515.545,257.954L515.924,192.575L484.145,192.575L484.145,255C484.145,256.988 482.533,258.6 480.545,258.6L431.545,258.6C429.557,258.6 427.945,256.988 427.945,255L427.945,192.575L393.145,192.575L393.145,251C393.145,252.678 391.985,254.134 390.349,254.509C388.713,254.884 387.035,254.078 386.304,252.568L357.287,192.575L342.236,192.575C331.882,192.575 322.608,198.982 318.944,208.666L262.666,357.425L687.802,357.425C682.706,352.504 679.545,345.603 679.545,338C679.545,323.162 691.586,311 706.545,311C710.328,311 713.924,311.778 717.188,313.181ZM723.548,327.39L725.355,331.43C725.722,332.25 726.026,333.088 726.267,333.938C726.546,335.248 726.692,336.606 726.692,338C726.692,347.352 720.095,355.121 711.297,357.214C710.382,357.353 709.45,357.425 708.509,357.425L702.794,357.425C693.501,355.704 686.398,347.705 686.398,338C686.398,327.026 695.482,318.232 706.545,318.232C713.662,318.232 719.96,321.871 723.548,327.39Z" fill="#a855f7" />
-                </g>
-              </svg>
+              <img src="/ahm_logo.svg" alt="AHM Labs Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
-            <span className="showcase-name">ahm-labs.com</span>
-            <span className="showcase-desc">Consulting, deployment blueprints, and specialized edge infrastructure.</span>
+            <span className="showcase-name">AHM Labs</span>
+            <span className="showcase-desc">AHM Labs is the studio by Aaron Mayo (aaron-js.dev) creating B2C/B2B sites and Enterprise Software.</span>
           </a>
 
           <a href="https://nanolog.dev" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
@@ -1015,7 +1011,7 @@ export default function App() {
               </svg>
             </div>
             <span className="showcase-name">NanoLog</span>
-            <span className="showcase-desc">Ultralightweight, zero-dependency structural logger for TypeScript.</span>
+            <span className="showcase-desc">NanoLog is a 3 in 1 communication tool for SaaS and is built under AHM Labs.</span>
           </a>
 
           <a href="https://redact.nanolog.dev" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
@@ -1029,17 +1025,15 @@ export default function App() {
               </svg>
             </div>
             <span className="showcase-name">Nanolog Redact</span>
-            <span className="showcase-desc">Secure scrubbing of PII & secrets from structural server logs.</span>
+            <span className="showcase-desc">Redact is a free tool based on the same PII privacy NanoLog.dev is founded upon, built in-house.</span>
           </a>
 
           <a href="https://fastaddress.ahm-labs.com" target="_blank" rel="noopener noreferrer" className="glass-panel showcase-card">
             <div className="showcase-logo-icon">
-              <svg viewBox="0 0 128 128" fill="none">
-                <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" fill="#00f5d4" />
-              </svg>
+              <img src="/fastaddress_logo.svg" alt="Fast Address UK Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </div>
-            <span className="showcase-name">fastAddressUK</span>
-            <span className="showcase-desc">Ultra-fast UK address parsing and validation REST API.</span>
+            <span className="showcase-name">Fast Address UK</span>
+            <span className="showcase-desc">A blazing fast UK Address API for other developers and vibe coders, with over 24 million UK addresses.</span>
           </a>
 
         </div>
@@ -1071,16 +1065,12 @@ export default function App() {
               </div>
             </div>
             <div className="case-study-logo">
-              <div style={{ width: '150px', height: '150px' }}>
-                <svg viewBox="0 0 128 128" fill="none" style={{ width: '100%', height: '100%' }}>
-                  <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" fill="url(#studyglow)" />
-                  <defs>
-                    <linearGradient id="studyglow" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#7b2cbf" />
-                      <stop offset="100%" stopColor="#00f5d4" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+              <div style={{ width: '180px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img 
+                  src="/fastaddress_logo.svg" 
+                  alt="Fast Address UK Logo" 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} 
+                />
               </div>
             </div>
           </div>
