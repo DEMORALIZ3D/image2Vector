@@ -242,6 +242,33 @@ export default function App() {
   const [primitiveTolerance, setPrimitiveTolerance] = useState<number>(3.0); // 0-10
   const [enablePrimitives, setEnablePrimitives] = useState<boolean>(true);
 
+  // Pipeline Presets state
+  const [preset, setPreset] = useState<string>('custom');
+
+  const applyPreset = (p: string) => {
+    setPreset(p);
+    if (p === 'logo') {
+      setSimplifyEpsilon(0.05);
+      setCurveSmoothing(0.3);
+      setCornerThreshold(30);
+      setEnablePrimitives(true);
+      setPrimitiveTolerance(4.0);
+      setFilterSpeckle(4);
+    } else if (p === 'illustration') {
+      setSimplifyEpsilon(0.35);
+      setCurveSmoothing(0.7);
+      setCornerThreshold(60);
+      setEnablePrimitives(false);
+      setFilterSpeckle(8);
+    } else if (p === 'photo') {
+      setSimplifyEpsilon(0.60);
+      setCurveSmoothing(0.85);
+      setCornerThreshold(80);
+      setEnablePrimitives(false);
+      setFilterSpeckle(12);
+    }
+  };
+
   // Interactive tooltip
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number; show: boolean }>({
     text: '', x: 0, y: 0, show: false
@@ -732,6 +759,21 @@ export default function App() {
               <h2 className="section-title">
                 <Settings size={16} /> Vectorizer Settings
               </h2>
+
+              <div className="form-group">
+                <label className="form-label">Pipeline Optimisation Preset</label>
+                <select 
+                  className="select-input" 
+                  value={preset} 
+                  onChange={(e) => applyPreset(e.target.value)}
+                  style={{ width: '100%', padding: '0.6rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  <option value="custom">Custom Configuration</option>
+                  <option value="logo">Logo / Sharp Corners (High Precision)</option>
+                  <option value="illustration">Illustration / Graphic Art</option>
+                  <option value="photo">Photo / Smooth Gradient Details</option>
+                </select>
+              </div>
               
               {isLocalhost && (
                 <div className="form-group">
@@ -842,10 +884,10 @@ export default function App() {
                   Noise Filter (Speckle size)
                   <span className="form-value">{filterSpeckle}px</span>
                 </label>
-                <input 
+                 <input 
                   type="range" min="1" max="100" step="1"
                   value={filterSpeckle}
-                  onChange={(e) => setFilterSpeckle(parseInt(e.target.value))}
+                  onChange={(e) => { setFilterSpeckle(parseInt(e.target.value)); setPreset('custom'); }}
                 />
               </div>
 
@@ -857,7 +899,7 @@ export default function App() {
                 <input 
                   type="range" min="10" max="150" step="5"
                   value={cornerThreshold}
-                  onChange={(e) => setCornerThreshold(parseInt(e.target.value))}
+                  onChange={(e) => { setCornerThreshold(parseInt(e.target.value)); setPreset('custom'); }}
                 />
               </div>
             </div>
@@ -878,7 +920,7 @@ export default function App() {
                 <input 
                   type="range" min="0" max="5" step="0.05"
                   value={simplifyEpsilon}
-                  onChange={(e) => setSimplifyEpsilon(parseFloat(e.target.value))}
+                  onChange={(e) => { setSimplifyEpsilon(parseFloat(e.target.value)); setPreset('custom'); }}
                 />
               </div>
 
@@ -890,7 +932,7 @@ export default function App() {
                 <input 
                   type="range" min="0" max="1.2" step="0.05"
                   value={curveSmoothing}
-                  onChange={(e) => setCurveSmoothing(parseFloat(e.target.value))}
+                  onChange={(e) => { setCurveSmoothing(parseFloat(e.target.value)); setPreset('custom'); }}
                 />
               </div>
 
@@ -900,7 +942,7 @@ export default function App() {
                   <input 
                     type="checkbox"
                     checked={enablePrimitives}
-                    onChange={(e) => setEnablePrimitives(e.target.checked)}
+                    onChange={(e) => { setEnablePrimitives(e.target.checked); setPreset('custom'); }}
                     style={{ accentColor: 'var(--accent-blue)', width: '1rem', height: '1rem', cursor: 'pointer' }}
                   />
                 </div>
@@ -915,7 +957,7 @@ export default function App() {
                   <input 
                     type="range" min="0.5" max="8" step="0.1"
                     value={primitiveTolerance}
-                    onChange={(e) => setPrimitiveTolerance(parseFloat(e.target.value))}
+                    onChange={(e) => { setPrimitiveTolerance(parseFloat(e.target.value)); setPreset('custom'); }}
                   />
                 </div>
               )}
