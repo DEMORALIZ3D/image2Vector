@@ -437,6 +437,9 @@ export async function postProcessSVG(
 
   const svg = jsonObj.svg;
   let paths = svg.path;
+  if (!paths && svg.g) {
+    paths = svg.g.path;
+  }
   if (!paths) {
     return { svg: svgString, stats: { originalPaths: 0, primitivesFound: 0, totalVertices: 0 } };
   }

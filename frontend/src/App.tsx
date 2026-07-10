@@ -13,6 +13,8 @@ interface VectorStats {
   svgSizeKb: number;
 }
 
+const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 export default function App() {
   // Input file state
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -44,9 +46,7 @@ export default function App() {
   
   const [separationMode, setSeparationMode] = useState<boolean>(true);
   const [colorMergeTolerance, setColorMergeTolerance] = useState<number>(35); // 0-100
-  const [engineMode, setEngineMode] = useState<'local' | 'wasm'>(
-    typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'local' : 'wasm'
-  );
+  const [engineMode, setEngineMode] = useState<'local' | 'wasm'>(isLocalhost ? 'local' : 'wasm');
 
   // Gradient creator states
   const [gradStart, setGradStart] = useState<string>('');
@@ -514,11 +514,13 @@ export default function App() {
           <div className="app-logo-icon">V</div>
           VectoPrime
         </div>
-        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            Status: <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>Active Local Node Engine</span>
-          </span>
-        </div>
+        {isLocalhost && (
+          <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+              Status: <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>Active Local Node Engine</span>
+            </span>
+          </div>
+        )}
       </header>
 
       {/* DASHBOARD CONTAINER */}
@@ -576,23 +578,25 @@ export default function App() {
                 <Settings size={16} /> Vectorizer Settings
               </h2>
               
-              <div className="form-group">
-                <label className="form-label">Processing Engine</label>
-                <div className="toggle-group">
-                  <button 
-                    className={`toggle-btn ${engineMode === 'local' ? 'active' : ''}`}
-                    onClick={() => setEngineMode('local')}
-                  >
-                    Local Backend
-                  </button>
-                  <button 
-                    className={`toggle-btn ${engineMode === 'wasm' ? 'active' : ''}`}
-                    onClick={() => setEngineMode('wasm')}
-                  >
-                    In-Browser (Wasm)
-                  </button>
+              {isLocalhost && (
+                <div className="form-group">
+                  <label className="form-label">Processing Engine</label>
+                  <div className="toggle-group">
+                    <button 
+                      className={`toggle-btn ${engineMode === 'local' ? 'active' : ''}`}
+                      onClick={() => setEngineMode('local')}
+                    >
+                      Local Backend
+                    </button>
+                    <button 
+                      className={`toggle-btn ${engineMode === 'wasm' ? 'active' : ''}`}
+                      onClick={() => setEngineMode('wasm')}
+                    >
+                      In-Browser (Wasm)
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="form-group">
                 <label className="form-label">Trace Mode</label>
