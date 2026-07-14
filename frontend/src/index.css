@@ -966,3 +966,48 @@ input[type="range"] {
     text-align: center;
   }
 }
+
+@media (max-width: 640px) {
+  .dashboard-grid {
+    padding: 0.6rem;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .canvas-split {
+    gap: 1rem;
+  }
+
+  .canvas-body {
+    padding: 0.8rem;
+  }
+
+  .stats-bar {
+    padding: 0.8rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .stat-item {
+    min-width: 45%;
+  }
+
+  .app-header {
+    width: calc(100% - 1.2rem);
+    margin: 0.6rem auto 0 auto;
+    padding: 0.6rem 1rem;
+    top: 0.6rem;
+  }
+
+  .controls-sidebar {
+    gap: 1rem;
+  }
+
+  .section-card {
+    padding: 1rem;
+  }
+
+  .uploader-box {
+    padding: 1.5rem 1rem;
+  }
+}
