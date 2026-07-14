@@ -85,24 +85,32 @@ export default function App() {
       uniform vec2 u_resolution;
       uniform float u_theme;
 
-      float noise(vec2 p) {
-        return sin(p.x * 2.0 + sin(u_time * 0.1) * 3.0) * cos(p.y * 1.5 + cos(u_time * 0.15) * 2.5);
+      float grid(vec2 st, float res) {
+        vec2 grid = fract(st * res);
+        vec2 line = step(0.98, grid);
+        return max(line.x, line.y);
+      }
+
+      float dots(vec2 st, float res) {
+        vec2 grid = fract(st * res) - 0.5;
+        return 1.0 - step(0.06, length(grid));
       }
 
       void main() {
         vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        float n1 = noise(uv * 3.0 + vec2(u_time * 0.05, u_time * 0.03));
-        float n2 = noise(uv * 1.5 - vec2(u_time * 0.02, -u_time * 0.04));
-        
-        vec3 light_bg = vec3(0.965, 0.973, 0.984);
-        vec3 light_flow1 = vec3(0.88, 0.93, 0.98);
-        vec3 light_flow2 = vec3(0.98, 0.90, 0.94);
-        vec3 light_color = mix(light_bg, mix(light_flow1, light_flow2, n2 * 0.5 + 0.5), n1 * 0.35 + 0.35);
+        uv.x *= u_resolution.x / u_resolution.y;
 
-        vec3 dark_bg = vec3(0.015, 0.02, 0.03);
-        vec3 dark_flow1 = vec3(0.06, 0.01, 0.12);
-        vec3 dark_flow2 = vec3(0.0, 0.05, 0.07);
-        vec3 dark_color = mix(dark_bg, mix(dark_flow1, dark_flow2, n2 * 0.5 + 0.5), n1 * 0.45 + 0.45);
+        float g1 = grid(uv, 30.0);
+        float g2 = grid(uv, 6.0);
+        float d1 = dots(uv, 30.0);
+
+        vec3 light_bg = vec3(0.972, 0.98, 0.988);
+        vec3 light_grid = vec3(0.90, 0.92, 0.95);
+        vec3 light_color = mix(light_bg, light_grid, max(g1 * 0.4, g2 * 0.8) + d1 * 0.3);
+
+        vec3 dark_bg = vec3(0.035, 0.043, 0.058);
+        vec3 dark_grid = vec3(0.09, 0.12, 0.17);
+        vec3 dark_color = mix(dark_bg, dark_grid, max(g1 * 0.4, g2 * 0.8) + d1 * 0.3);
 
         vec3 final_color = mix(light_color, dark_color, u_theme);
         gl_FragColor = vec4(final_color, 1.0);
@@ -663,12 +671,8 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
-      {/* FLOATING GLOW ANIMATIONS BACKDROP */}
       <div className="bg-glow-container">
         <canvas id="webgl-canvas"></canvas>
-        <div className="bg-glow-orb bg-glow-1"></div>
-        <div className="bg-glow-orb bg-glow-2"></div>
-        <div className="bg-glow-orb bg-glow-3"></div>
       </div>
       
       {/* HEADER BAR */}
